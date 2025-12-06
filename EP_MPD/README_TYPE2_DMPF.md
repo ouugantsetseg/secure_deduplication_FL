@@ -36,8 +36,8 @@ This is an enhanced implementation of the EP-MPD (Efficient Private Multi-Party 
 | DMPF Type | Element Range | Evaluation Time | Key Size | Best For |
 |-----------|---------------|-----------------|----------|----------|
 | **DpfDmpf** | < 5,000 | Medium | Large | Small sets |
-| **OkvsDmpf** | 5,000 - 4,999,999 | **0.03ms** ⚡ | Medium | Most use cases |
-| **BatchCodeDmpf** | ≥ 5,000,000 | 182ms 🐌 | Small | Massive datasets |
+| **OkvsDmpf** | 5,000 - 4,999,999 | **0.03ms**  | Medium | Most use cases |
+| **BatchCodeDmpf** | ≥ 5,000,000 | 182ms | Small | Massive datasets |
 
 ---
 
