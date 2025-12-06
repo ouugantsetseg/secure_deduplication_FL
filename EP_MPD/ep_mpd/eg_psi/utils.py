@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Union
 import struct
 import base64
 import os
@@ -12,6 +12,7 @@ from ep_mpd.eg_psi.type1.prp_key import PRPKey
 class EgPsiType(Enum):
     TYPE1 = auto()
     TYPE2 = auto()
+    TYPE2_DMPF = auto()  # DMPF-based Type 2 protocol
 
 
 class EgPsiDataType(Enum):
@@ -31,7 +32,7 @@ def keygen_pairwise_type1(client_ids: List[int]) -> Dict[int, PRPKey]:
     return keys
 
 
-def encode_element(ele: int | str) -> bytes:
+def encode_element(ele: Union[int, str]) -> bytes:
     if type(ele) is int:
         ele_bytes = struct.pack("<I", ele)
     elif type(ele) is str:
@@ -39,7 +40,7 @@ def encode_element(ele: int | str) -> bytes:
     return ele_bytes
 
 
-def decode_element(ele_bytes: bytes, data_type: EgPsiDataType) -> int | str:
+def decode_element(ele_bytes: bytes, data_type: EgPsiDataType) -> Union[int, str]:
     if data_type == EgPsiDataType.INT:
         ele = struct.unpack("<I", ele_bytes)[0]
     elif data_type == EgPsiDataType.STR:

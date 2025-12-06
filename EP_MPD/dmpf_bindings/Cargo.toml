@@ -1,0 +1,19 @@
+[package]
+name = "dmpf-py"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "dmpf_py"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.20", features = ["extension-module"] }
+dmpf = { path = "./dmpf" }
+rand = "0.9"
+rand_chacha = "0.9"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

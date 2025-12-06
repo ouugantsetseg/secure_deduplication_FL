@@ -1,9 +1,11 @@
-from typing import List
+from typing import List, Union
 from ep_mpd.eg_psi.type1.client import ClientType1
 from ep_mpd.eg_psi.type2.client import ClientType2
+from ep_mpd.eg_psi.type2_dmpf.client import ClientType2DMPF
 from ep_mpd.eg_psi.utils import keygen_pairwise_type1
 from ep_mpd.eg_psi.type1.tp import SemiTrustedThirdPartyType1
 from ep_mpd.eg_psi.type2.tp import SemiTrustedThirdPartyType2
+from ep_mpd.eg_psi.type2_dmpf.tp import SemiTrustedThirdPartyType2DMPF
 from ep_mpd.eg_psi.utils import EgPsiType, EgPsiDataType
 import time
 from collections import defaultdict
@@ -23,6 +25,8 @@ class MultiPartyDeduplicator:
             self.tp = SemiTrustedThirdPartyType1()
         elif eg_type == EgPsiType.TYPE2:
             self.tp = SemiTrustedThirdPartyType2()
+        elif eg_type == EgPsiType.TYPE2_DMPF:
+            self.tp = SemiTrustedThirdPartyType2DMPF()
         self.num_clients = 0
         self.debug = debug
 
@@ -63,9 +67,11 @@ class MultiPartyDeduplicator:
                 client.set_keys(keys=keys[client_id])
             elif self.eg_type == EgPsiType.TYPE2:
                 client = ClientType2(client_id=client_id, data_type=self.data_type)
+            elif self.eg_type == EgPsiType.TYPE2_DMPF:
+                client = ClientType2DMPF(client_id=client_id, data_type=self.data_type)
             client.create_set(data_set=data)
-            # if type2, then also encrypt all the data
-            if self.eg_type == EgPsiType.TYPE2:
+            # if type2 or type2_dmpf, then also encrypt all the data
+            if self.eg_type == EgPsiType.TYPE2 or self.eg_type == EgPsiType.TYPE2_DMPF:
                 start = time.perf_counter()
                 tp_time = client.encrypt_elements(self.tp)
                 end = time.perf_counter()
@@ -223,11 +229,13 @@ class MultiPartyDeduplicator:
                 self.eg_psi_type1(left, mid, right, level)
             elif self.eg_type == EgPsiType.TYPE2:
                 self.eg_psi_type2(left, mid, right, level)
+            elif self.eg_type == EgPsiType.TYPE2_DMPF:
+                self.eg_psi_type2(left, mid, right, level)  # Same protocol structure as TYPE2
 
         mpd(0, self.num_clients, 0)
         self.time_end = datetime.now()
 
-    def get_combined_dataset(self) -> List[int | str]:
+    def get_combined_dataset(self) -> List[Union[int, str]]:
 
         combined_dataset = []
 
@@ -236,7 +244,7 @@ class MultiPartyDeduplicator:
 
         return combined_dataset
 
-    def get_client_dataset(self, client_id: int) -> List[int | str]:
+    def get_client_dataset(self, client_id: int) -> List[Union[int, str]]:
         return self.clients[client_id].get_deduplicated_dataset()
 
     def print_timing_stats(self):

@@ -57,13 +57,13 @@ def plot_data(data, data_labels, name):
 
     for size in data:
         if name == "dsize":
-            path_t1 = f"type1_runs/{size}_10_0.3.log"
+            path_t1 = f"original/{size}_10_0.3.log"
             path_t2 = f"type2_runs/{size}_10_0.3.log"
         elif name == "clients":
-            path_t1 = f"type1_runs/15_{size}_0.3.log"
+            path_t1 = f"original/15_{size}_0.3.log"
             path_t2 = f"type2_runs/15_{size}_0.3.log"
         elif name == "dup":
-            path_t1 = f"type1_runs/15_10_{size}.log"
+            path_t1 = f"original/15_10_{size}.log"
             path_t2 = f"type2_runs/15_10_{size}.log"
 
         with open(path_t1, "r") as f_t1:
@@ -90,13 +90,13 @@ def plot_data(data, data_labels, name):
         x - width / 4 - width / 32,
         times_t1,
         width / 2,
-        label=r"$\ensuremath{\text {EP-MPD}^{(\text {I})}$" if shutil.which("latex") else "EP-MPD(I)",
+        label=r"$\ensuremath{\text {Original}^{(\text {})}$" if shutil.which("latex") else "Original",
     )
     bar2 = ax.bar(
         x + width / 4 + width / 32,
         times_t2,
         width / 2,
-        label=r"$\ensuremath{\text {EP-MPD}^{(\text {II})}$" if shutil.which("latex") else "EP-MPD(II)",
+        label=r"$\ensuremath{\text {Improved}^{(\text {})}$" if shutil.which("latex") else "Improved",
     )
 
     # Add some text for labels, title, and custom x-axis tick labels, etc.
